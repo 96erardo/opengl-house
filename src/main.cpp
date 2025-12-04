@@ -1,9 +1,14 @@
-#include <iostream>
-
 #define GLFW_INCLUDE_NONE
-
+#include <iostream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
+
+#include "Shader.h"
+#include "Renderer.h"
+#include "IndexBuffer.h"
+#include "VertexArray.h"
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
 
 int main() {
 
@@ -29,10 +34,35 @@ int main() {
 	glfwMakeContextCurrent(window);
 	gladLoadGL();
 
+	Shader shader("res/shaders/Basic.shader");
+
+	float data[] = {
+		 0.5f, 0.5f, 0.0f,
+		 0.5f,-0.5f, 0.0f,
+		-0.5f,-0.5f, 0.0f,
+		-0.5f, 0.5f, 0.0f,
+	};
+
+	unsigned int index[] = {
+		0, 1, 2,
+		0, 2, 3
+	};
+
+	VertexBuffer vb(&data, sizeof(float) * 3 * 4);
+	IndexBuffer ib(index, 6);
+	VertexArray va;
+	VertexBufferLayout layout;
+	Renderer renderer;
+
+	layout.Push<float>(3);
+
+	va.addLayout(vb, layout);
+
 	while (!glfwWindowShouldClose(window))
 	{
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		renderer.clear();
+
+		renderer.draw(va, ib, shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
