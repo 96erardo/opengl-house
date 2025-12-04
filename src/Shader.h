@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
-//#include <glm/glm.hpp>
-//#include <glm/gtc/matrix_transform.hpp>
-//#include <glm/gtc/type_ptr.hpp>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 struct ShaderSource { std::string VertexSource, FragmentSource; };
 
@@ -21,7 +21,7 @@ public:
 
 	void setUniform4f(const std::string& name, float v0, float v1, float v2, float v3);
 	void setUniform1i(const std::string& name, int i1);
-	// void setUniformM4f(const std::string& name, const glm::mat4& m);
+	void setUniformM4f(const std::string& name, const glm::mat4& m);
 
 	void Bind() const;
 	void Unbind() const;
