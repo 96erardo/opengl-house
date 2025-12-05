@@ -1,4 +1,4 @@
-# OpenGL-House
+# OpenGL Simple House
 
 ![Demo](./res/images/demo.gif "What you'll see when you run the program")
 
