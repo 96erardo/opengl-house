@@ -159,6 +159,9 @@
     <None Include="res\shaders\Basic.shader" />
     <None Include="res\shaders\Ceiling.shader" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\images\demo.gif" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
