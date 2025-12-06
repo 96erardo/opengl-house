@@ -40,28 +40,25 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 
 	Shader shader("res/shaders/Basic.shader");
-	Shader ceilShader("res/shaders/Ceiling.shader");
 
-	float walls[] = {
-		 0.5f, 0.5f,  0.5f,
-		 0.5f,-0.5f,  0.5f,
-		-0.5f,-0.5f,  0.5f,
-		-0.5f, 0.5f,  0.5f,
+	float data[] = {
+		// Walls
+		 0.5f, 0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,-0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,-0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f,  0.5f,  1.0f, 1.0f, 1.0f,
 
-		 0.5f, 0.5f, -0.5f,
-		 0.5f,-0.5f, -0.5f,
-		-0.5f,-0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
-	};
+		 0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		 0.5f,-0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f,-0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
+		-0.5f, 0.5f, -0.5f,  1.0f, 1.0f, 1.0f,
 
-	float ceiling[] = {
-		 0.0f, 1.0f, 0.0f,
-
-		 0.5f, 0.5f,  0.5f,
-		-0.5f, 0.5f,  0.5f,
-
-		 0.5f, 0.5f, -0.5f,
-		-0.5f, 0.5f, -0.5f,
+		// Ceiling
+		 0.0f, 1.0f,  0.0f,  1.0f, 0.0f, 0.0f,
+		 0.5f, 0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f,  0.5f,  1.0f, 0.0f, 0.0f,
+		 0.5f, 0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
+		-0.5f, 0.5f, -0.5f,  1.0f, 0.0f, 0.0f,
 	};
 
 	unsigned int wallIndex[] = {
@@ -79,34 +76,23 @@ int main() {
 	};
 
 	unsigned int ceilIndex[] = {
-		0, 1, 2,
-		0, 2, 4,
-		0, 3, 4,
-		0, 1, 3
+		8,  9, 10,
+		8, 10, 12,
+		8, 11, 12,
+		8, 12, 11
 	};
 
-	VertexBuffer vb(&walls, sizeof(float) * 3 * 4 * 2);
+	VertexBuffer vb(&data, sizeof(float) * 6 * 13);
+	IndexBuffer  ceilIb(ceilIndex, 3 * 4);
 	IndexBuffer ib(wallIndex, 6 * 4);
 	VertexArray va;
 	VertexBufferLayout layout;
 	Renderer renderer;
 
 	layout.Push<float>(3);
+	layout.Push<float>(3);
 
 	va.addLayout(vb, layout);
-
-	vb.Unbind();
-	ib.Unbind();
-	va.Unbind();
-
-	VertexBuffer ceilVb(&ceiling, sizeof(float) * 3 * 5);
-	IndexBuffer  ceilIb(ceilIndex, 3 * 4);
-	VertexArray ceilVa;
-	VertexBufferLayout ceilLayout;
-
-	ceilLayout.Push<float>(3);
-
-	ceilVa.addLayout(ceilVb, ceilLayout);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -127,14 +113,8 @@ int main() {
 		shader.setUniformM4f("projection", projection);
 		shader.Unbind();
 
-		ceilShader.Bind();
-		ceilShader.setUniformM4f("model", model);
-		ceilShader.setUniformM4f("view", view);
-		ceilShader.setUniformM4f("projection", projection);
-		ceilShader.Unbind();
-
 		renderer.draw(va, ib, shader);
-		renderer.draw(ceilVa, ceilIb, ceilShader);
+		renderer.draw(va, ceilIb, shader);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
